@@ -45,16 +45,16 @@ let s:delay = get(g:, 'cursorword_delay', 50)
 if has('timers') && s:delay > 0
   let s:timer = 0
   function! cursorword#cursormoved() abort
+    call timer_stop(s:timer)
+    let s:timer = timer_start(s:delay, 'cursorword#timer_callback')
+  endfunction
+  function! cursorword#timer_callback(...) abort
     if get(w:, 'cursorword_match')
       silent! call matchdelete(w:cursorword_id0)
       silent! call matchdelete(w:cursorword_id1)
       let w:cursorword_match = 0
       let w:cursorword_state = []
     endif
-    call timer_stop(s:timer)
-    let s:timer = timer_start(s:delay, 'cursorword#timer_callback')
-  endfunction
-  function! cursorword#timer_callback(...) abort
     call cursorword#matchadd()
   endfunction
 else
