@@ -26,12 +26,11 @@ augroup cursorword
   if get(g:, 'cursorword_insert', 1)
     autocmd CursorMoved,CursorMovedI * call cursorword#cursormoved()
     autocmd InsertEnter * call cursorword#matchadd(1)
-    autocmd InsertLeave * call cursorword#matchadd(0)
   else
     autocmd CursorMoved * call cursorword#cursormoved()
     autocmd InsertEnter * call cursorword#hidematch()
-    autocmd InsertLeave * call cursorword#recovermatch()
   endif
+  autocmd InsertLeave * call cursorword#matchadd(0)
 augroup END
 
 let &cpo = s:save_cpo

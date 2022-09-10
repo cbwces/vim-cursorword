@@ -65,8 +65,10 @@ else
 endif
 
 function! cursorword#hidematch() abort
-  silent! call matchdelete(w:cursorword_id0)
-  silent! call matchdelete(w:cursorword_id1)
+  if get(w:, 'cursorword_match')
+    silent! call matchdelete(w:cursorword_id0)
+    silent! call matchdelete(w:cursorword_id1)
+  endif
 endfunction
 
 function! cursorword#recovermatch() abort
