@@ -63,5 +63,12 @@ else
   endfunction
 endif
 
+function! cursorword#clearmatch() abort
+  silent! call matchdelete(w:cursorword_id0)
+  silent! call matchdelete(w:cursorword_id1)
+  let w:cursorword_match = 0
+  let w:cursorword_state = []
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo

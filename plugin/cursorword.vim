@@ -23,9 +23,14 @@ augroup cursorword
     autocmd WinEnter,BufEnter * call cursorword#matchadd()
   endif
   autocmd ColorScheme * call cursorword#highlight()
-  autocmd CursorMoved,CursorMovedI * call cursorword#cursormoved()
-  autocmd InsertEnter * call cursorword#matchadd(1)
-  autocmd InsertLeave * call cursorword#matchadd(0)
+  if get(g:, 'cursorword_insert', 1)
+    autocmd CursorMoved,CursorMovedI * call cursorword#cursormoved()
+    autocmd InsertEnter * call cursorword#matchadd(1)
+    autocmd InsertLeave * call cursorword#matchadd(0)
+  else
+    autocmd CursorMoved * call cursorword#cursormoved()
+    autocmd InsertEnter * call cursorword#clearmatch()
+  endif
 augroup END
 
 let &cpo = s:save_cpo
