@@ -35,9 +35,10 @@ function! cursorword#matchadd(...) abort
   endif
   let w:cursorword_match = 0
   if !enable || word ==# '' || len(word) !=# strchars(word) && word !~# s:alphabets || len(word) > 1000 | return | endif
-  let pattern = '\<' . escape(word, '~"\.^$[]*') . '\>'
-  let w:cursorword_id0 = matchadd('CursorWord0', pattern, -100)
-  let w:cursorword_id1 = matchadd('CursorWord' . &l:cursorline, '\%' . linenr . 'l' . pattern, -100)
+  let s:pattern = '\<' . escape(word, '~"\.^$[]*') . '\>'
+  let w:cursorword_id0 = matchadd('CursorWord0', s:pattern, -100)
+  let s:currentline_pattern = '\%' . linenr . 'l' . s:pattern
+  let w:cursorword_id1 = matchadd('CursorWord' . &l:cursorline, s:currentline_pattern, -100)
   let w:cursorword_match = 1
 endfunction
 
@@ -63,11 +64,14 @@ else
   endfunction
 endif
 
-function! cursorword#clearmatch() abort
+function! cursorword#hidematch() abort
   silent! call matchdelete(w:cursorword_id0)
   silent! call matchdelete(w:cursorword_id1)
-  let w:cursorword_match = 0
-  let w:cursorword_state = []
+endfunction
+
+function! cursorword#recovermatch() abort
+  let w:cursorword_id0 = matchadd('CursorWord0', s:pattern, -100)
+  let w:cursorword_id1 = matchadd('CursorWord' . &l:cursorline, s:currentline_pattern, -100)
 endfunction
 
 let &cpo = s:save_cpo

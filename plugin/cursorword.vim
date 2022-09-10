@@ -29,7 +29,8 @@ augroup cursorword
     autocmd InsertLeave * call cursorword#matchadd(0)
   else
     autocmd CursorMoved * call cursorword#cursormoved()
-    autocmd InsertEnter * call cursorword#clearmatch()
+    autocmd InsertEnter * call cursorword#hidematch()
+    autocmd InsertLeave * call cursorword#recovermatch()
   endif
 augroup END
 
